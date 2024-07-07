@@ -19,10 +19,18 @@ library(lawstat)
 
 #Erlang distribution
 
-k1<- 4; k2 <- 10; 
+k1<- 3; k2 <- 20; 
 results<-func_Erlang_WMW(k1=k1, k2=k2)
 lambda1 <- 1-results$r_root;
 lambda2 <- results$r_root;
+
+#plot of density
+xmax <- max(k1/lambda1+sqrt(k1/(lambda1^2))*3,
+            k2/lambda2+sqrt(k2/(lambda2^2))*3)
+ggplot(data = data.frame(X=c(0, xmax)), aes(x=X)) +
+  stat_function(fun=function(x) dgamma(x, shape=k1, rate = lambda1), aes(color="X")) +
+  stat_function(fun=function(x) dgamma(x, shape=k2, rate = lambda2), aes(color="Y"))
+
 
 cat(" k: ", k1, k2, "\n",
     "lambda: ", lambda1, lambda2, "\n", "\n",
@@ -66,14 +74,6 @@ dat_results %>%
   group_by(test) %>%
   summarize(Nsim=n(), pval=mean(value), alpha=mean(value<0.05)
             )
-
-
-#plot of density
-xmax <- max(k1/lambda1+sqrt(k1/(lambda1^2))*3,
-            k2/lambda2+sqrt(k2/(lambda2^2))*3)
-ggplot(data = data.frame(X=c(0, xmax)), aes(x=X)) +
-  stat_function(fun=function(x) dgamma(x, shape=k1, rate = lambda1), aes(color="X")) +
-  stat_function(fun=function(x) dgamma(x, shape=k2, rate = lambda2), aes(color="Y"))
 
 
 

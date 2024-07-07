@@ -51,7 +51,7 @@ ggplot(data = data.frame(X=c(0, xmax)), aes(x=X)) +
 # debag
 
 # solving
-k1<- 5; k2 <- 5; 
+k1<- 10; k2 <- 20; 
 
 K<-k1+k2
 coef_ <- numeric(K)
