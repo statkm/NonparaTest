@@ -19,7 +19,7 @@ func_Erlang_WMW <- function(k1, k2, eps=10^-6){
 
 
 
-k1<- 1; k2 <- 2; 
+k1<- 1; k2 <- 20; 
 results<-func_Erlang_WMW(k1=k1, k2=k2)
 results
 

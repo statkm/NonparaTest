@@ -1,10 +1,11 @@
+library(tidyverse)
 library(ggplot2)
 
 #install.packages("exactRankTests")
 #library(exactRankTests)
 
 #Brunner-Munzel
-install.packages("lawstat")
+#install.packages("lawstat")
 library(lawstat)
 
 #install.packages("DescTools")
@@ -41,10 +42,10 @@ cat(" k: ", k1, k2, "\n",
     "\n")
 
 Nsim <- 100000
-df_pval <-c(); df_pval2 <-c(); 
+df_pval <-c(); df_pval2 <-c(); df_pval3<-c(); df_pval4<-c()
 df_est <-c()
 pb <- txtProgressBar(min = 1, max = Nsim, style = 3)
-N<-1000
+N<-500
 for(i in 1:Nsim){
   dfx <- rgamma(N, shape=k1, rate = lambda1)
   dfy <- rgamma(N, shape=k2, rate = lambda2)
@@ -54,16 +55,20 @@ for(i in 1:Nsim){
   #dfy <- rnorm(N, mean=-0.05, sd=0.55)
   
   #df_est <- c(df_est, pairwiseCI() )
-  
-  df_pval2 <- c(df_pval2, brunner.munzel.test(x=dfx, y=dfy)$p.value)
   df_pval <- c(df_pval, wilcox.test(x=dfx, y=dfy)$p.value)
+  df_pval2 <- c(df_pval2, brunner.munzel.test(x=dfx, y=dfy)$p.value)
+  df_pval3 <- c(df_pval3, t.test(x=dfx, y=dfy, var.equal = TRUE)$p.value)
+  df_pval4 <- c(df_pval4, t.test(x=dfx, y=dfy, var.equal = FALSE)$p.value)
+ 
   
   setTxtProgressBar(pb, i) 
 }
 
 dat_results <-rbind(
   data.frame(value=df_pval, test="WMW"),
-  data.frame(value=df_pval2, test="BM")
+  data.frame(value=df_pval2, test="BM"),
+  data.frame(value=df_pval3, test="T"),
+  data.frame(value=df_pval4, test="Welch")
 )
 
 dat_results %>%
@@ -72,7 +77,7 @@ dat_results %>%
 
 dat_results %>%
   group_by(test) %>%
-  summarize(Nsim=n(), pval=mean(value), alpha=mean(value<0.05)
+  summarize(Nsim=n(), k1=k1, k2=k2, lambda1=lambda1, lambda2=lambda2, pval=mean(value), alpha=mean(value<0.05)
             )
 
 
@@ -81,6 +86,10 @@ N<-100000
 dfx <- rgamma(N, shape=k1, rate = lambda1)
 dfy <- rgamma(N, shape=k2, rate = lambda2)
 mean(dfx<dfy)
+
+
+
+
 
 
 

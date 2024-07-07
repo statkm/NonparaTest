@@ -38,6 +38,72 @@ ggplot(data = data.frame(X=c(0, 5)), aes(x=X)) +
 
 
 
+#Erlang distribution with WMW effect is 0.5
+k_cand <- c(1, 2, 5, 10, 20)
+k1_cand <- k_cand
+k2_cand <- k_cand
+lambda_cand <- c(0.1, 1, 5, 10) # lambda1+lambda2
+
+N<-10000
+
+col_<-c("k1", "k2", "lambda1", "lambda2", "mean1", "mean2", "mean.diff", "mean.ratio", 
+        "std1","std2", "std.ratio", "skew1", "skew2", "skew.ratio", "kur1", "kur2", "kur.ratio")
+n <- length(col_)
+df_cand<-data.frame(matrix(rep(NA, n), nrow=1))[numeric(0), ]
+
+
+df_cand
+
+for(i in 1:length(k_cand)){
+  for(j in i:length(k_cand)){
+    for(l in 1:length(lambda_cand)){
+      k1<-k1_cand[i]; k2<-k2_cand[j]
+      results<-func_Erlang_WMW(k1=k1, k2=k2)
+      
+      lambda1 <- (1-results$r_root)*lambda_cand[l];
+      lambda2 <- results$r_root*lambda_cand[l];
+      
+      #dfx <- rgamma(N, shape=k1, rate = lambda1)
+      #dfy <- rgamma(N, shape=k2, rate = lambda2)
+      #cat(k1, k2, lambda1, lambda2, results$r_root, mean(dfx<dfy), "\n") #P(X<Y)
+      #plot of density
+      xmax <- max(k1/lambda1+sqrt(k1/(lambda1^2))*2,
+                  k2/lambda2+sqrt(k2/(lambda2^2))*2)
+      g<-ggplot(data = data.frame(X=c(0, xmax)), aes(x=X)) +
+        stat_function(fun=function(x) dgamma(x, shape=k1, rate = lambda1), aes(color="X")) +
+        stat_function(fun=function(x) dgamma(x, shape=k2, rate = lambda2), aes(color="Y"))
+      
+      
+      
+      
+      ggsave(plot=g, filename=paste0("pic/plot_", k1, "_", k2, "_", round(lambda1,1), "_", round(lambda2, 1), ".png"))
+      
+      df_cand <- rbind(df_cand,
+      c(k1, k2, lambda1, lambda2, k1/lambda1, k2/lambda2, k1/lambda1-k2/lambda2, k1/lambda1/(k2/lambda2), 
+          (sqrt(k1)/lambda1), (sqrt(k2)/lambda2), (sqrt(k1)/lambda1)/(sqrt(k2)/lambda2), 
+          2/sqrt(k1), 2/sqrt(k2), 2/sqrt(k1)/(2/sqrt(k2)), 
+          6/k1, (6/k2), 6/k1/(6/k2))
+      )
+      
+    }
+  }
+}
+
+names(df_cand)<-col_
+df_cand
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #log normal
