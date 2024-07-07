@@ -30,6 +30,16 @@ ggplot(data = data.frame(X=c(0, 5)), aes(x=X)) +
 
 
 
+
+
+
+
+
+
+
+
+
+
 #log normal
 #https://en.wikipedia.org/wiki/Log-normal_distribution
 fun_ln_skew <- function(mu, sigma){

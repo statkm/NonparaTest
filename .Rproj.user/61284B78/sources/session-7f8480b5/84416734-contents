@@ -48,12 +48,10 @@ ggplot(data = data.frame(X=c(0, xmax)), aes(x=X)) +
 
 
 
-
-
 # debag
 
 # solving
-k1<- 1; k2 <- 3; 
+k1<- 5; k2 <- 5; 
 
 K<-k1+k2
 coef_ <- numeric(K)
@@ -69,8 +67,9 @@ coef_[1]<-coef_[1]-0.5
 coef_
 
 roots<-polyroot(coef_)
+roots
 
-root<-roots[(abs(Im(roots)) < 10^-6) & (Re(roots)>0)]
+root<-roots[(abs(Im(roots)) < 10^-6) & (Re(roots)>0)& (Re(roots)<1)]
 length(root)
 
 Re(root)
