@@ -1,7 +1,7 @@
 {
     "id": "84416734",
-    "path": "~/Desktop/codes/NonparaTest/Brunner-Munzel.R",
-    "project_path": "Brunner-Munzel.R",
+    "path": "~/Desktop/codes/NonparaTest/WMWeffect_gamma.R",
+    "project_path": "WMWeffect_gamma.R",
     "type": "r_source",
     "hash": "0",
     "contents": "",
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "10,7",
-        "scrollLine": "0"
+        "cursorPosition": "49,0",
+        "scrollLine": "32"
     },
     "folds": "",
-    "lastKnownWriteTime": 1720321583,
+    "lastKnownWriteTime": 1720326914,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1720321583527,
+    "last_content_update": 1720326914440,
     "read_only": false,
     "read_only_alternatives": []
 }

@@ -1,6 +1,9 @@
-library(tidyverse)
 # Brunner-Munzel
+library(tidyverse)
+library(ggplot2)
 
+
+# debag
 
 # solving
 k1<- 1; k2 <- 3; 
@@ -27,6 +30,9 @@ Re(root)
 
 
 
+
+
+
 func_Erlang_WMW <- function(k1, k2, eps=10^-6){
   K<-k1+k2
   coef_ <- numeric(K)
@@ -36,17 +42,14 @@ func_Erlang_WMW <- function(k1, k2, eps=10^-6){
   coef_[1]<-coef_[1]-0.5 # converting to polyfunction = 0
   roots<-polyroot(coef_)
   root<-roots[(abs(Im(roots)) < eps) & (0<Re(roots)) & (Re(roots)<1)]
-  if(length(root)==1){
-    r_root <- Re(root)
-  } 
-  else 
-    warning("Some roots are found.")
+  if(length(root)==1) r_root <- Re(root)
+  else warning("Some roots are found.")
   return(list(r_root=r_root, roots=roots, coef_=coef_, k1=k1, k2=k2))
 }
 
 
 
-k1<- 1; k2 <- 10; 
+k1<- 1; k2 <- 2; 
 results<-func_Erlang_WMW(k1=k1, k2=k2)
 results
 
@@ -55,23 +58,16 @@ lambda1 <- 1-results$r_root;
 lambda2 <- results$r_root;
 
 
+# checking via Simulation
 N<-10000000
 dfx <- rgamma(N, shape=k1, rate = lambda1)
 dfy <- rgamma(N, shape=k2, rate = lambda2)
 mean(dfx<dfy)
 
 
-
-ggplot(data = data.frame(X=c(0, k1/lambda1+k1/(lambda1^2)*2)), aes(x=X)) +
+xmax <- max(k1/lambda1+sqrt(k1/(lambda1^2))*2,
+            k2/lambda2+sqrt(k2/(lambda2^2))*2)
+ggplot(data = data.frame(X=c(0, xmax)), aes(x=X)) +
   stat_function(fun=function(x) dgamma(x, shape=k1, rate = lambda1), aes(color="X")) +
   stat_function(fun=function(x) dgamma(x, shape=k2, rate = lambda2), aes(color="Y"))
 
-
-
-
-
-library(ggplot2)
-
-p <- ggplot(data=data.frame(X=c(0,k1/lambda1+k1/(lambda1^2)*2)), aes(x=X))
-p <- p + stat_function(fun=function(x) dgamma(x, shape = k1, rate = lambda1))
-p
